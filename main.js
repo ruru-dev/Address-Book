@@ -9,6 +9,8 @@ async function getUserInfo() {
   const response = await fetch("https://randomuser.me/api/");
 
   // Parse the response - this function also returns a Promise by default in Javascript
+  // The fetch command returns a promise which resolves as soon as it recieves the first header from the API server. 
+  // At this point, the body is still pending. We invoke the JSON method to await complete receipt of the body and the parse it as JSON. 
   const jsonData = await response.json();
 
   // An async function will always return a Promise. Once that Promise resolves it will provide the value we return here.
@@ -30,9 +32,12 @@ async function getUserInfo() {
  */
 async function getMultipleUserInfo(numUsers) {
   // Perform the fetch to the randomuser API - specify the number of users as a query parameter.
+  //The value we store in response is not a promise. Rather, it is the value resolved by the promise (in this case the data returned from the
+  // fetch, which is the response object.)
   const response = await fetch(`https://randomuser.me/api/?results=${numUsers}`);
 
-  // Parse the response - this function also returns a Promise by default in Javascript
+  // Parse the response - this function also returns a Promise by default in Javascript.
+  // This json method parses the response object (it looks at the response body then parses it.)
   const jsonData = await response.json();
 
   // An async function will always return a Promise. Once that Promise resolves it will provide the value we return here.
@@ -76,7 +81,7 @@ const displayUser = (person, i) => {
 
   // create an img element for that person
   const userPicture = person.picture.thumbnail;
-  const imgEl = document.createElement('img')
+  const imgEl = document.createElement('img');
   imgEl.src = userPicture;
   li.appendChild(imgEl);
 
@@ -86,6 +91,9 @@ const displayUser = (person, i) => {
   
   const buttonEl = document.createElement('button');
   buttonEl.innerText = "Show Info";
+  // Set onclick attribute to invoke the showInfo function when this button is clicked.
+  // showInfo takes two arguments: 1) the ID of the li being expanded 2) the JSON object which contains the persons full info.
+  // When setting this attribute it must be a string, therefore, we had to stringify the person object.
   buttonEl.setAttribute("onclick",`showInfo('${li.id}', '${JSON.stringify(person)}')`);
   li.append(buttonEl);
 
@@ -106,6 +114,7 @@ const showInfo = (id, person) => {
 /**
  * This is the main function which will display the complete list of addresses.
  */
+// Any async function will always return a promise. It will give you a promise object which represents it's eventual completion.
 const displayAddressList = async () => {
   // Use the await keyword since this is an aysnc function and we don't want to proceed until we have the data we need.
   await addPersonDataToArray();
@@ -117,5 +126,6 @@ const displayAddressList = async () => {
   }
 }
 
+// Entry point function that gets called when this JS file is run.
 displayAddressList();
 
